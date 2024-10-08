@@ -1,6 +1,4 @@
 # tw-angpao
-Plugin for receiving money from Truewallet (Angpao) Using [ElysiaJS](https://elysiajs.com/)
-
 ระบบรับเงินจาก Truewallet (ซองอั่งเปา) ด้วย [ElysiaJS](https://elysiajs.com/)
 
 ## ติดตั้ง:
