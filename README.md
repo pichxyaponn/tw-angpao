@@ -12,14 +12,38 @@ bun add @pichxyaponn/tw-angpao
 
 ```typescript
 
-import { Elysia } from 'elysia'
+import { Elysia, t } from 'elysia'
 import { TWAngpao } from '../src'
 
 const app = new Elysia()
-  .use(TWAngpao())
-  .listen(3000)
+.use(TWAngpao('TWA'))
 
-console.log(`🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`)
+.post('/redeem', async ({ body, TWA }) => {
+    const response = await TWA.redeem(body.phoneNumber, body.voucherCode)
+
+    if (response.status.code !== 'SUCCESS') {
+        return {
+            status: {
+                code: response.status.code,
+                message: response.status.message
+            }
+        }
+    }
+
+    return {
+        status: {
+            code: 'SUCCESS',
+            message: 'Voucher redeemed successfully!'
+        },
+        data: response.data
+    }
+}, {
+    body: t.Object({
+        phoneNumber: t.String(),
+        voucherCode: t.String()
+    })
+})
+.listen(3000)
 ```
 #### POST
 ```
@@ -80,6 +104,12 @@ host:port/redeem
     }
 }
 ```
+
+## Config
+### name
+ตั้งชื่อให้ Decorate method ได้:
+
+เช่น TWA จะ Decorate Context ด้วย Context.TWA
 
 ## Support
 

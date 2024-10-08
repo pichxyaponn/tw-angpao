@@ -20,7 +20,7 @@ describe('TW Angpao Plugin', () => {
         const voucherCode = 'your-test-voucher-code-here'
 
         const response = await app.handle(post('/redeem', { phoneNumber, voucherCode }))
-        const result = await response.json()
+        const result = await response
 
         expect(result).toHaveProperty('status')
     })
