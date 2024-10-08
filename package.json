@@ -1,0 +1,54 @@
+{
+    "name": "@pichxyaponn/tw-angpao",
+    "description": "Plugin for receiving money from Truewallet (Angpao)",
+    "version": "1.0.1",
+    "author": {
+        "name": "pichxyaponn",
+        "url": "https://github.com/pichxyaponn",
+        "email": "pichxyaponn@gmail.com"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/pichxyaponn/tw-angpao"
+    },
+    "main": "./dist/cjs/index.js",
+    "module": "./dist/index.mjs",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        "./package.json": "./package.json",
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.mjs",
+            "require": "./dist/cjs/index.js"
+        }
+    },
+    "scripts": {
+        "dev": "bun run --hot example/index.ts",
+        "test": "bun test && npm run test:node",
+        "test:node": "npm install --prefix ./test/node/cjs/ && npm install --prefix ./test/node/esm/ && node ./test/node/cjs/index.js && node ./test/node/esm/index.js",
+        "build": "bun build.ts",
+        "release": "npm run build && npm run test && npm publish --access public"
+    },
+    "keywords": [
+        "bun",
+        "elysia",
+        "truewallet",
+        "truemoney",
+        "angpao",
+        "voucher",
+        "envelope"
+    ],
+    "license": "MIT",
+    "devDependencies": {
+        "@types/bun": "latest",
+        "@typescript-eslint/eslint-plugin": "^6.6.0",
+        "@typescript-eslint/parser": "^6.6.0",
+        "elysia": "^1.1.19",
+        "eslint": "9.6.0",
+        "tsup": "^8.1.0",
+        "typescript": "^5.0.0"
+    },
+    "peerDependencies": {
+        "typescript": "^5.0.0"
+    }
+}
