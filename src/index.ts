@@ -64,7 +64,7 @@ async function redeemVoucher({ phoneNumber, voucherCode }: RedeemVoucher): Promi
         })
     })
 
-    const data = await response.json()
+    const data: any = await response.json()
     if (data.status.code === 'SUCCESS') {
         return data
     }
