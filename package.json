@@ -1,7 +1,7 @@
 {
     "name": "@pichxyaponn/tw-angpao",
     "description": "ระบบรับเงินจาก Truewallet (ซองอั่งเปา) ด้วย ElysiaJS",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "author": {
         "name": "pichxyaponn",
         "url": "https://github.com/pichxyaponn",

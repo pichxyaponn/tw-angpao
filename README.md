@@ -13,15 +13,14 @@ bun add @pichxyaponn/tw-angpao
 ```typescript
 
 import { Elysia, t } from 'elysia'
-import { TWAngpao } from '../src'
+import { TWAngpao } from '@pichxyaponn/tw-angpao'
 
 const app = new Elysia()
+const app = new Elysia()
 .use(TWAngpao('TWA'))
-
 .post('/redeem', async ({ body, TWA }) => {
     const response = await TWA.redeem(body.phoneNumber, body.voucherCode)
-
-    if (response.status.code !== 'SUCCESS') {
+    if (response.status.code !== 'SUCCESS') { // If not success
         return {
             status: {
                 code: response.status.code,
@@ -30,7 +29,7 @@ const app = new Elysia()
         }
     }
 
-    return {
+    return { // If successful
         status: {
             code: 'SUCCESS',
             message: 'Voucher redeemed successfully!'
@@ -44,6 +43,7 @@ const app = new Elysia()
     })
 })
 .listen(3000)
+
 ```
 #### POST
 ```
@@ -104,6 +104,14 @@ host:port/redeem
     }
 }
 ```
+
+| code                    | message                             |
+| ----------------------- | ----------------------------------- |
+| VOUCHER_OUT_OF_STOCK    | Voucher ticket is out of stock.     |
+| VOUCHER_NOT_FOUND       | Voucher doesn't exist.              |
+| CANNOT_GET_OWN_VOUCHER  | Cannot claim your own voucher.      |
+| VOUCHER_EXPIRED         | The gift voucher link has expired.  |
+| SUCCESS                 | Voucher redeemed successfully!      |
 
 ## Config
 ### name

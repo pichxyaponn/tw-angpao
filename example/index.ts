@@ -5,11 +5,9 @@ import { TWAngpao } from '../src'
 
 const app = new Elysia()
 .use(TWAngpao('TWA'))
-
 .post('/redeem', async ({ body, TWA }) => {
     const response = await TWA.redeem(body.phoneNumber, body.voucherCode)
-
-    if (response.status.code !== 'SUCCESS') {
+    if (response.status.code !== 'SUCCESS') { // If not success
         return {
             status: {
                 code: response.status.code,
@@ -18,7 +16,7 @@ const app = new Elysia()
         }
     }
 
-    return {
+    return { // If successful
         status: {
             code: 'SUCCESS',
             message: 'Voucher redeemed successfully!'
