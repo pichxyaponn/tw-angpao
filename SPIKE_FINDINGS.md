@@ -11,23 +11,28 @@
   - `@sinclair/typebox/compiler` `TypeCompiler.Compile` -> `typebox/compile` `Compile`
   - `typeof shape.static` -> `Static<typeof shape>` (TypeBox 1.0 dropped `.static`)
 - `tsc` declaration build and `tsup` build pass after those changes.
+- **The `TWAngpao` plugin runs fine on Elysia v2.** A route using it returns
+  the correct status codes (400 invalid phone, 400 API error, 200 success) —
+  verified with the real plugin against mocked fetch.
 
-## Blockers
-1. ~~**json-accelerator@0.1.7 (type-level).**~~ RESOLVED — removed
-   json-accelerator entirely. Its only role was picking a serializer for the
-   2-field outgoing body, where the gain over `JSON.stringify` is negligible.
-   Dropping it also removed the TypeBox compiler usage from `utils.ts`, so the
-   v2 typecheck/build now pass with no `@ts-expect-error`. This removal is
-   independently worthwhile and should land on `main` regardless of v2.
-2. **Elysia v2 core route API changed (undocumented).** The existing
-   `.post(path, handler, { body })` pattern no longer runs the handler — the
-   request returns the options object (the body JSON schema) instead. `status()`
-   and `set.status` both work in isolation, but the plugin/route usage breaks.
-   No migration guide exists yet (exp.1). This is now the only blocker.
+## Resolved / non-issues
+1. ~~**json-accelerator@0.1.7 (type-level).**~~ Removed entirely. Its only role
+   was picking a serializer for the 2-field outgoing body, where the gain over
+   `JSON.stringify` is negligible. Dropping it also removed the TypeBox compiler
+   usage from `utils.ts`, so the v2 typecheck/build pass with no
+   `@ts-expect-error`. Worthwhile on `main` regardless of v2.
+2. ~~**Elysia v2 "breaks" the route handler.**~~ MISDIAGNOSED. v2 simply
+   **swapped the route argument order**: v1 `.post(path, handler, schema)` ->
+   v2 `.post(path, schema, handler)` (schema first, handler last; see the JSDoc
+   in `node_modules/elysia/dist/base.d.ts`). With the new order the handler runs
+   and everything works. This only affects consumer route registration (and the
+   example/tests), not the library's redeem logic.
 
 ## Verdict
-Still not feasible to migrate the published library now — but the only
-remaining blocker is the churning, undocumented v2 route API (json-accelerator
-is no longer in the way). Our source is otherwise ready. Revisit when Elysia v2
-reaches RC/stable and ships a migration guide; the source-side migration is
-then a few lines (the typebox import/`Static`/`Compile` changes above).
+Elysia v2 **works** with this library — the migration is mechanical (typebox
+import/`Static`/`Compile`, and the `.post` arg-order swap in tests/example).
+The remaining reason NOT to ship is purely release-stage, not technical:
+`2.0.0-exp.1` is experimental (published today, API will churn, no migration
+guide) and `latest` is still v1, so a stable release depending on v2-exp would
+break v1 users. Recommended: wait for v2 RC/stable, then apply the (now small,
+well-understood) migration.
