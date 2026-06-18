@@ -21,8 +21,15 @@ describe("TW Angpao Plugin", () => {
 
   beforeEach(() => {
     mockFetch.mockReset();
+    // Elysia v2: route schema comes before the handler — .post(path, schema, handler)
     app = new Elysia().use(TWAngpao()).post(
       "/redeem",
+      {
+        body: t.Object({
+          phoneNumber: t.String(),
+          voucherCode: t.String()
+        })
+      },
       async ({ body, TWA, set }) => {
         try {
           const response = await TWA.redeem(body.phoneNumber, body.voucherCode);
@@ -51,12 +58,6 @@ describe("TW Angpao Plugin", () => {
             }
           };
         }
-      },
-      {
-        body: t.Object({
-          phoneNumber: t.String(),
-          voucherCode: t.String()
-        })
       }
     );
   });

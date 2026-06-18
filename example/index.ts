@@ -20,8 +20,13 @@ const models = new Elysia().model({
     status: t.Object({
       code: t.String(),
       message: t.String(),
+      // v2-exp typing gap: t.Any() exists at runtime but isn't on the typed
+      // surface of elysia's `t` yet. Remove these suppressions once v2 ships
+      // complete typings.
+      // @ts-expect-error v2-exp: t.Any present at runtime, missing from types
       error: t.Optional(t.Any())
     }),
+    // @ts-expect-error v2-exp: t.Any present at runtime, missing from types
     data: t.Optional(t.Any())
   })
 });
@@ -29,8 +34,16 @@ const models = new Elysia().model({
 const app = new Elysia()
   .use(models)
   .use(TWAngpao("TWA"))
+  // Elysia v2: route schema comes before the handler — .post(path, schema, handler)
   .post(
     "/redeem",
+    {
+      body: "redeem.body",
+      response: {
+        400: "redeem.error",
+        500: "redeem.error"
+      }
+    },
     async ({ body, TWA, status }) => {
       const response = await TWA.redeem(body.phoneNumber, body.voucherCode);
 
@@ -48,13 +61,6 @@ const app = new Elysia()
 
       // Success (200) — already shaped as { status: { code, message, data } }
       return response;
-    },
-    {
-      body: "redeem.body",
-      response: {
-        400: "redeem.error",
-        500: "redeem.error"
-      }
     }
   )
   .listen(3000);
