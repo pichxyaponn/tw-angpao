@@ -5,7 +5,7 @@ import {
   type ApiResponse,
   type ApiResponseError,
   type ApiResponseSuccess
-} from "./type.d";
+} from "./type";
 import createAccelerator from "json-accelerator";
 import { ApiError, JsonParseError } from "./error.class";
 import { TypeCompiler } from "@sinclair/typebox/compiler";

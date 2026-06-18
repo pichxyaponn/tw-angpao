@@ -1,4 +1,4 @@
-// src/type.d.ts
+// src/type.ts
 
 import { Type as t } from "@sinclair/typebox";
 
