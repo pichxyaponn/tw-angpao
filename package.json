@@ -55,6 +55,7 @@
     "tsup": "^8.5.1"
   },
   "peerDependencies": {
+    "elysia": "^1.4.0",
     "typescript": "^6.0.3"
   },
   "dependencies": {
