@@ -48,17 +48,17 @@
   "license": "MIT",
   "devDependencies": {
     "@types/bun": "latest",
-    "@typescript-eslint/eslint-plugin": "^8.43.0",
-    "@typescript-eslint/parser": "^8.43.0",
-    "elysia": "^1.4.4",
-    "eslint": "^9.35.0",
-    "tsup": "^8.5.0"
+    "@typescript-eslint/eslint-plugin": "^8.61.1",
+    "@typescript-eslint/parser": "^8.61.1",
+    "elysia": "^1.4.29",
+    "eslint": "^9.39.4",
+    "tsup": "^8.5.1"
   },
   "peerDependencies": {
     "typescript": "^5.8.3"
   },
   "dependencies": {
-    "@sinclair/typebox": "^0.34.41",
+    "@sinclair/typebox": "^0.34.49",
     "json-accelerator": "^0.1.7"
   }
 }
