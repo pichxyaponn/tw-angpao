@@ -1,7 +1,7 @@
 // src/index.ts
 
 import { Elysia } from "elysia";
-import { shape, type ApiResponse, type RedeemVoucher } from "./type.d";
+import type { shape, ApiResponse, RedeemVoucher } from "./type.d";
 import { ApiError, JsonParseError, NetworkError, ValidationError } from "./error.class";
 import {
   getValidVoucherCode,
@@ -43,8 +43,11 @@ async function redeemVoucher({
   const cacheKey = `${cleanedPhoneNumber}:${validVoucherCode}`;
   const cachedResponse = cache.get(cacheKey);
 
-  if (cachedResponse && cachedResponse.expiry > Date.now()) {
-    return cachedResponse.data; // Return cached data
+  if (cachedResponse) {
+    if (cachedResponse.expiry > Date.now()) {
+      return cachedResponse.data; // Return cached data
+    }
+    cache.delete(cacheKey); // Evict expired entry to keep the cache bounded
   }
 
   const url = `https://gift.truemoney.com/campaign/vouchers/${validVoucherCode}/redeem`;

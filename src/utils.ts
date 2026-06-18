@@ -10,6 +10,10 @@ import createAccelerator from "json-accelerator";
 import { ApiError, JsonParseError } from "./error.class";
 import { TypeCompiler } from "@sinclair/typebox/compiler";
 
+// --- Pre-compiled schema (compiled once at module load, reused per request) ---
+const guard = TypeCompiler.Compile(shape);
+const encode = createAccelerator(shape);
+
 // --- Validation Functions ---
 export function getValidVoucherCode(voucherCode: Readonly<string>): string {
   const parts = voucherCode.split("?v=");
@@ -39,8 +43,6 @@ export async function makeApiRequest(
     voucher_hash: string;
   }>
 ): Promise<Response> {
-  const guard = TypeCompiler.Compile(shape);
-  const encode = createAccelerator(shape);
   const response = await fetch(url, {
     method: "POST",
     headers: {
@@ -59,7 +61,9 @@ export async function parseApiResponse(response: Readonly<Response>): Promise<Ap
       if (errorData) {
         return errorData as ApiResponseError;
       }
-    } catch (parseError) {}
+    } catch {
+      // ignore parse error; fall through to throwing an ApiError below
+    }
     throw new ApiError(
       `HTTP_ERROR_${response?.ok ? "OK" : "UNKNOWN"}`,
       `API request failed: ${response?.statusText || "Unknown"}`
