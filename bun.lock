@@ -6,7 +6,6 @@
       "name": "@pichxyaponn/tw-angpao",
       "dependencies": {
         "@sinclair/typebox": "^0.34.49",
-        "json-accelerator": "^0.1.7",
         "typebox": "^1.2.16",
       },
       "devDependencies": {
@@ -294,8 +293,6 @@
     "jackspeak": ["jackspeak@3.4.3", "", { "dependencies": { "@isaacs/cliui": "^8.0.2" }, "optionalDependencies": { "@pkgjs/parseargs": "^0.11.0" } }, "sha512-OGlZQpz2yfahA/Rd1Y8Cd9SIEsqvXkLVoSw/cgwhnhFMDbsQFeZYoJJ7bIZBS9BcamUW96asq/npPWugM+RQBw=="],
 
     "joycon": ["joycon@3.1.1", "", {}, "sha512-34wB/Y7MW7bzjKRjUKTa46I2Z7eV62Rkhva+KkopW7Qvv/OSWBqvkSY7vusOPrNuZcUG3tApvdVgNB8POj3SPw=="],
-
-    "json-accelerator": ["json-accelerator@0.1.7", "", { "peerDependencies": { "@sinclair/typebox": ">= 0.34.0" }, "optionalPeers": ["@sinclair/typebox"] }, "sha512-L72UW1WY0M9MASSmxpSwcWekGY00rTYr3XNbQrPcAJVkNhHU71+mwHienzj5MjiRMVU0tDQ4bE/owbIkgG0VNg=="],
 
     "json-buffer": ["json-buffer@3.0.1", "", {}, "sha512-4bV5BfR2mqfQTJm+V5tPPdf+ZpuhiIvTuAB5g8kcrXOZpTT/QwwVRWBywX1ozr6lEuPdbHxwaJlm9G6mI2sfSQ=="],
 

@@ -1,21 +1,7 @@
 // src/utils.ts
 
-import {
-  shape,
-  type ApiResponse,
-  type ApiResponseError,
-  type ApiResponseSuccess
-} from "./type.d";
-import createAccelerator from "json-accelerator";
+import { type ApiResponse, type ApiResponseError, type ApiResponseSuccess } from "./type.d";
 import { ApiError, JsonParseError } from "./error.class";
-import { Compile } from "typebox/compile";
-
-// --- Pre-compiled schema (compiled once at module load, reused per request) ---
-const guard = Compile(shape);
-// SPIKE: json-accelerator@0.1.7 types target @sinclair/typebox 0.34, not
-// typebox 1.0. Runtime is compatible (verified); only the types disagree.
-// @ts-expect-error json-accelerator not yet updated for typebox 1.0
-const encode = createAccelerator(shape);
 
 // --- Validation Functions ---
 export function getValidVoucherCode(voucherCode: Readonly<string>): string {
@@ -51,7 +37,7 @@ export async function makeApiRequest(
     headers: {
       "content-type": "application/json"
     },
-    body: guard.Check(body) ? encode(body) : JSON.stringify(body)
+    body: JSON.stringify(body)
   });
   return response;
 }

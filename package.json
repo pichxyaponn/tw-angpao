@@ -59,7 +59,6 @@
   },
   "dependencies": {
     "@sinclair/typebox": "^0.34.49",
-    "json-accelerator": "^0.1.7",
     "typebox": "^1.2.16"
   }
 }
