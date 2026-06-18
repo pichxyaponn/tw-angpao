@@ -13,11 +13,13 @@
   "main": "./dist/cjs/index.js",
   "module": "./dist/index.mjs",
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@types/bun": "latest",
     "@typescript-eslint/eslint-plugin": "^8.61.1",
     "@typescript-eslint/parser": "^8.61.1",
     "elysia": "2.0.0-exp.1",
     "eslint": "^10.5.0",
+    "globals": "^17.6.0",
     "tsup": "^8.5.1"
   },
   "peerDependencies": {
