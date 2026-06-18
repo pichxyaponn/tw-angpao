@@ -43,8 +43,11 @@ async function redeemVoucher({
   const cacheKey = `${cleanedPhoneNumber}:${validVoucherCode}`;
   const cachedResponse = cache.get(cacheKey);
 
-  if (cachedResponse && cachedResponse.expiry > Date.now()) {
-    return cachedResponse.data; // Return cached data
+  if (cachedResponse) {
+    if (cachedResponse.expiry > Date.now()) {
+      return cachedResponse.data; // Return cached data
+    }
+    cache.delete(cacheKey); // Evict expired entry to keep the cache bounded
   }
 
   const url = `https://gift.truemoney.com/campaign/vouchers/${validVoucherCode}/redeem`;
