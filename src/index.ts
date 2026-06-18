@@ -1,6 +1,7 @@
 // src/index.ts
 
 import { Elysia } from "elysia";
+import type { Static } from "typebox";
 import type { shape, ApiResponse, RedeemVoucher } from "./type.d";
 import { ApiError, JsonParseError, NetworkError, ValidationError } from "./error.class";
 import {
@@ -54,7 +55,7 @@ async function redeemVoucher({
   const body = {
     mobile: cleanedPhoneNumber,
     voucher_hash: validVoucherCode
-  } satisfies typeof shape.static;
+  } satisfies Static<typeof shape>;
 
   try {
     const response = await makeApiRequest(url, body);

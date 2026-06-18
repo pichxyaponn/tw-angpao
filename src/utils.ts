@@ -8,10 +8,13 @@ import {
 } from "./type.d";
 import createAccelerator from "json-accelerator";
 import { ApiError, JsonParseError } from "./error.class";
-import { TypeCompiler } from "@sinclair/typebox/compiler";
+import { Compile } from "typebox/compile";
 
 // --- Pre-compiled schema (compiled once at module load, reused per request) ---
-const guard = TypeCompiler.Compile(shape);
+const guard = Compile(shape);
+// SPIKE: json-accelerator@0.1.7 types target @sinclair/typebox 0.34, not
+// typebox 1.0. Runtime is compatible (verified); only the types disagree.
+// @ts-expect-error json-accelerator not yet updated for typebox 1.0
 const encode = createAccelerator(shape);
 
 // --- Validation Functions ---
