@@ -59,7 +59,9 @@ export async function parseApiResponse(response: Readonly<Response>): Promise<Ap
       if (errorData) {
         return errorData as ApiResponseError;
       }
-    } catch (parseError) {}
+    } catch {
+      // ignore parse error; fall through to throwing an ApiError below
+    }
     throw new ApiError(
       `HTTP_ERROR_${response?.ok ? "OK" : "UNKNOWN"}`,
       `API request failed: ${response?.statusText || "Unknown"}`

@@ -1,7 +1,7 @@
 // src/index.ts
 
 import { Elysia } from "elysia";
-import { shape, type ApiResponse, type RedeemVoucher } from "./type.d";
+import type { shape, ApiResponse, RedeemVoucher } from "./type.d";
 import { ApiError, JsonParseError, NetworkError, ValidationError } from "./error.class";
 import {
   getValidVoucherCode,
