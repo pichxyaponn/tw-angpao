@@ -1,7 +1,7 @@
 // src/index.ts
 
 import { Elysia } from "elysia";
-import type { shape, ApiResponse, RedeemVoucher } from "./type.d";
+import type { shape, ApiResponse, RedeemVoucher } from "./type";
 import { ApiError, JsonParseError, NetworkError, ValidationError } from "./error.class";
 import {
   getValidVoucherCode,
@@ -9,10 +9,6 @@ import {
   makeApiRequest,
   parseApiResponse
 } from "./utils";
-
-// --- Cache Setup ---
-const cache = new Map<string, { readonly data: ApiResponse; readonly expiry: number }>();
-const ERROR_CACHE_TTL = 1000 * 60 * 5; // 5 minutes for error responses
 
 // --- Main redeemVoucher Function ---
 async function redeemVoucher({
@@ -40,16 +36,6 @@ async function redeemVoucher({
       data: null
     };
 
-  const cacheKey = `${cleanedPhoneNumber}:${validVoucherCode}`;
-  const cachedResponse = cache.get(cacheKey);
-
-  if (cachedResponse) {
-    if (cachedResponse.expiry > Date.now()) {
-      return cachedResponse.data; // Return cached data
-    }
-    cache.delete(cacheKey); // Evict expired entry to keep the cache bounded
-  }
-
   const url = `https://gift.truemoney.com/campaign/vouchers/${validVoucherCode}/redeem`;
   const body = {
     mobile: cleanedPhoneNumber,
@@ -58,12 +44,7 @@ async function redeemVoucher({
 
   try {
     const response = await makeApiRequest(url, body);
-    const apiResponse = await parseApiResponse(response);
-
-    if (apiResponse.status.code !== "SUCCESS") {
-      cache.set(cacheKey, { data: apiResponse, expiry: Date.now() + ERROR_CACHE_TTL });
-    }
-    return apiResponse;
+    return await parseApiResponse(response);
   } catch (error) {
     if (error instanceof ValidationError || error instanceof ApiError)
       return {
@@ -92,7 +73,7 @@ async function redeemVoucher({
 }
 
 export const TWAngpao = (name: string = "TWA") => {
-  return new Elysia().decorate(name, {
+  return new Elysia({ name: "tw-angpao", seed: name }).decorate(name, {
     async redeem(phoneNumber: string, voucherCode: string) {
       return redeemVoucher({
         phoneNumber,

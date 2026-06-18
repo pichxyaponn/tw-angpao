@@ -1,18 +1,7 @@
 // src/utils.ts
 
-import {
-  shape,
-  type ApiResponse,
-  type ApiResponseError,
-  type ApiResponseSuccess
-} from "./type.d";
-import createAccelerator from "json-accelerator";
+import { type ApiResponse, type ApiResponseError, type ApiResponseSuccess } from "./type";
 import { ApiError, JsonParseError } from "./error.class";
-import { TypeCompiler } from "@sinclair/typebox/compiler";
-
-// --- Pre-compiled schema (compiled once at module load, reused per request) ---
-const guard = TypeCompiler.Compile(shape);
-const encode = createAccelerator(shape);
 
 // --- Validation Functions ---
 export function getValidVoucherCode(voucherCode: Readonly<string>): string {
@@ -48,7 +37,7 @@ export async function makeApiRequest(
     headers: {
       "content-type": "application/json"
     },
-    body: guard.Check(body) ? encode(body) : JSON.stringify(body)
+    body: JSON.stringify(body)
   });
   return response;
 }

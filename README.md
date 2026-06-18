@@ -6,6 +6,8 @@
 
 ```bash
 bun add @pichxyaponn/tw-angpao
+# หรือ
+npm install @pichxyaponn/tw-angpao
 ```
 
 ## ตัวอย่างการใช้งาน:
@@ -16,36 +18,58 @@ bun add @pichxyaponn/tw-angpao
 import { Elysia, t } from "elysia";
 import { TWAngpao } from "@pichxyaponn/tw-angpao";
 
+// Reusable validation models — a single source of truth for both
+// runtime validation and TypeScript types.
+const models = new Elysia().model({
+  "redeem.body": t.Object({
+    phoneNumber: t.String({
+      minLength: 1,
+      description: "Thai mobile number (e.g. 0812345678 or +66812345678)"
+    }),
+    voucherCode: t.String({
+      minLength: 1,
+      description: "TrueMoney voucher hash or full gift link"
+    })
+  }),
+  "redeem.error": t.Object({
+    status: t.Object({
+      code: t.String(),
+      message: t.String(),
+      error: t.Optional(t.Any())
+    }),
+    data: t.Optional(t.Any())
+  })
+});
+
 const app = new Elysia()
+  .use(models)
   .use(TWAngpao("TWA"))
   .post(
     "/redeem",
-    async ({ body, TWA }) => {
+    async ({ body, TWA, status }) => {
       const response = await TWA.redeem(body.phoneNumber, body.voucherCode);
+
       if (response.status.code !== "SUCCESS") {
-        // If not success
-        return {
-          status: {
-            code: response.status.code,
-            message: response.status.message
-          }
-        };
+        const code = response.status.code;
+        // Server-side failures -> 5xx, invalid input / voucher problems -> 4xx
+        const httpStatus =
+          code.startsWith("HTTP_ERROR_") ||
+          code.startsWith("NETWORK_ERROR") ||
+          code === "INVALID_JSON_RESPONSE"
+            ? 500
+            : 400;
+        return status(httpStatus, response);
       }
 
-      return {
-        // If successful
-        status: {
-          code: "SUCCESS",
-          message: "Voucher redeemed successfully!"
-        },
-        data: response.data
-      };
+      // Success (200) — already shaped as { status: { code, message, data } }
+      return response;
     },
     {
-      body: t.Object({
-        phoneNumber: t.String(),
-        voucherCode: t.String()
-      })
+      body: "redeem.body",
+      response: {
+        400: "redeem.error",
+        500: "redeem.error"
+      }
     }
   )
   .listen(3000);
@@ -114,6 +138,8 @@ host:port/redeem
 }
 ```
 
+#### Status codes จาก TrueMoney (ส่งต่อจาก API ปลายทาง)
+
 | code                   | message                            |
 | ---------------------- | ---------------------------------- |
 | VOUCHER_OUT_OF_STOCK   | Voucher ticket is out of stock.    |
@@ -122,6 +148,16 @@ host:port/redeem
 | CANNOT_GET_OWN_VOUCHER | Cannot claim your own voucher.     |
 | VOUCHER_EXPIRED        | The gift voucher link has expired. |
 | SUCCESS                | Voucher redeemed successfully!     |
+
+#### Status codes จากตัว library เอง
+
+| code                  | สาเหตุ                                          |
+| --------------------- | ----------------------------------------------- |
+| INVALID_PHONE_NUMBER  | เบอร์โทรไม่ใช่รูปแบบเบอร์มือถือไทยที่ถูกต้อง     |
+| INVALID_VOUCHER_CODE  | voucher code/link ว่างหรือแกะ code ไม่ได้        |
+| HTTP_ERROR_UNKNOWN    | API ปลายทางตอบกลับไม่สำเร็จ (response ไม่ ok)    |
+| INVALID_JSON_RESPONSE | API ตอบกลับมาไม่ใช่ JSON ที่ถูกต้อง              |
+| NETWORK_ERROR         | error ที่ไม่คาดคิด/เชื่อมต่อปลายทางไม่ได้        |
 
 ## Config
 
@@ -137,4 +173,4 @@ host:port/redeem
 
 ### Issues
 
-มีปัญหาหรือฟีเจอร์ที่อยากให้เพิ่ม แจ้งได้ที่ [หน้า Issues](https://github.com/pichxyaponn/truewallet-angpao/issues)
+มีปัญหาหรือฟีเจอร์ที่อยากให้เพิ่ม แจ้งได้ที่ [หน้า Issues](https://github.com/pichxyaponn/tw-angpao/issues)
