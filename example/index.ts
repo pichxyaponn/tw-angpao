@@ -20,13 +20,8 @@ const models = new Elysia().model({
     status: t.Object({
       code: t.String(),
       message: t.String(),
-      // v2-exp typing gap: t.Any() exists at runtime but isn't on the typed
-      // surface of elysia's `t` yet. Remove these suppressions once v2 ships
-      // complete typings.
-      // @ts-expect-error v2-exp: t.Any present at runtime, missing from types
       error: t.Optional(t.Any())
     }),
-    // @ts-expect-error v2-exp: t.Any present at runtime, missing from types
     data: t.Optional(t.Any())
   })
 });

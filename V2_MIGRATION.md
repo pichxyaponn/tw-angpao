@@ -1,9 +1,12 @@
 # Elysia v2 migration (kept ready)
 
-This branch ports the library to **Elysia `2.0.0-exp.1`** + **TypeBox 1.0**
-(`typebox`). It builds, lints, tests (3/3) and passes the Node CJS/ESM smoke
+This branch ports the library to **Elysia `2.0.0-exp.25`** + **TypeBox 1.3**
+(`typebox`). It builds, lints, tests (23/23) and passes the Node CJS/ESM smoke
 tests. **Do not publish yet** — Elysia v2 is still `experimental` (the `latest`
 dist-tag is v1), so this is held until v2 reaches RC/stable.
+
+> Elysia v2 is churning fast (exp.1 → exp.25 already). Re-verify this branch
+> against the newest exp — or ideally against the eventual RC — before shipping.
 
 ## What changed vs v1
 
@@ -17,9 +20,9 @@ dist-tag is v1), so this is held until v2 reaches RC/stable.
 
 The redeem logic itself is unchanged; the `TWAngpao` plugin runs as-is on v2.
 
-## Known v2-exp rough edge
+## Notes
 
-`t.Any()` exists at runtime but is missing from the typed surface of elysia's
-`t` in `2.0.0-exp.1`. The example suppresses this with `@ts-expect-error`
-(clearly marked); remove those once v2 ships complete typings — the
-`@ts-expect-error` will start failing, which is the signal to drop it.
+- The `t.Any()` typing gap seen in `2.0.0-exp.1` (where `t.Any()` ran fine but
+  was missing from elysia's typed `t`) is **fixed as of exp.25** — the example
+  no longer needs `@ts-expect-error`.
+- The v2 route signature (`.post(path, schema, handler)`) still holds on exp.25.
