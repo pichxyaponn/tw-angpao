@@ -44,8 +44,16 @@ const models = new Elysia().model({
 const app = new Elysia()
   .use(models)
   .use(TWAngpao("TWA"))
+  // Elysia v2: route schema comes before the handler — .post(path, schema, handler)
   .post(
     "/redeem",
+    {
+      body: "redeem.body",
+      response: {
+        400: "redeem.error",
+        500: "redeem.error"
+      }
+    },
     async ({ body, TWA, status }) => {
       const response = await TWA.redeem(body.phoneNumber, body.voucherCode);
 
@@ -63,13 +71,6 @@ const app = new Elysia()
 
       // Success (200) — already shaped as { status: { code, message, data } }
       return response;
-    },
-    {
-      body: "redeem.body",
-      response: {
-        400: "redeem.error",
-        500: "redeem.error"
-      }
     }
   )
   .listen(3000);

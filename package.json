@@ -17,13 +17,13 @@
     "@types/bun": "latest",
     "@typescript-eslint/eslint-plugin": "^8.61.1",
     "@typescript-eslint/parser": "^8.61.1",
-    "elysia": "2.0.0-exp.40",
+    "elysia": "2.0.0-beta.1",
     "eslint": "^10.5.0",
     "globals": "^17.6.0",
     "tsup": "^8.5.1"
   },
   "peerDependencies": {
-    "elysia": "^2.0.0-exp.40",
+    "elysia": "^2.0.0-beta.1",
     "typescript": "^6.0.3"
   },
   "exports": {
@@ -61,6 +61,6 @@
   },
   "types": "./dist/index.d.ts",
   "dependencies": {
-    "typebox": "^1.3.6"
+    "typebox": "^1.3.9"
   }
 }

@@ -1,12 +1,14 @@
 # Elysia v2 migration (kept ready)
 
-This branch ports the library to **Elysia `2.0.0-exp.40`** + **TypeBox 1.3.6**
+This branch ports the library to **Elysia `2.0.0-beta.1`** + **TypeBox 1.3.9**
 (`typebox`). It builds, lints, tests (23/23) and passes the Node CJS/ESM smoke
-tests. **Do not publish yet** — Elysia v2 is still `experimental` (the `latest`
-dist-tag is v1), so this is held until v2 reaches RC/stable.
+tests. **Do not publish yet** — Elysia v2 is on the `next` dist-tag while
+`latest` is still v1, so this is held until v2 goes stable.
 
-> Elysia v2 is churning fast (exp.1 → exp.40 already). Re-verify this branch
-> against the newest exp — or ideally against the eventual RC — before shipping.
+> Elysia v2 has been promoted from `experimental` to **beta** (`next` tag).
+> Note the prerelease ordering trap: `2.0.0-beta.1` sorts *below* `2.0.0-exp.61`
+> in semver, so a `^2.0.0-exp.*` peer range silently excludes the betas — the
+> peer range here is `^2.0.0-beta.1`, which matches beta, exp, and 2.x stable.
 
 ## What changed vs v1
 
@@ -23,6 +25,8 @@ The redeem logic itself is unchanged; the `TWAngpao` plugin runs as-is on v2.
 ## Notes
 
 - The `t.Any()` typing gap seen in `2.0.0-exp.1` (where `t.Any()` ran fine but
-  was missing from elysia's typed `t`) is **fixed as of exp.25 (still fine on exp.40)** — the example
-  no longer needs `@ts-expect-error`.
-- The v2 route signature (`.post(path, schema, handler)`) still holds on exp.40.
+  was missing from elysia's typed `t`) is **fixed as of exp.25** and stays fixed
+  on beta.1 — the example no longer needs `@ts-expect-error`.
+- The v2 route signature (`.post(path, schema, handler)`) still holds on beta.1.
+  The README example and `example/index.ts` are kept byte-identical apart from
+  the import path, so the two cannot drift out of sync.
