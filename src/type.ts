@@ -52,7 +52,11 @@ export interface ApiResponseError {
   status: {
     code: string;
     message: string;
-    error?: any;
+    /**
+     * Whatever the upstream API attached. Its shape is not part of any contract,
+     * so it stays `unknown` — narrow it at the point of use.
+     */
+    error?: unknown;
   };
   data?: null;
 }

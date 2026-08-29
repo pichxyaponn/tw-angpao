@@ -42,13 +42,31 @@ export async function makeApiRequest(
   return response;
 }
 
+// --- Response Shape Guards ---
+// `response.json()` yields `unknown`. These narrow it without an unchecked cast,
+// so a provider that changes its payload fails here rather than at the caller's
+// first property access.
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null;
+}
+
+function isApiResponseSuccess(value: unknown): value is ApiResponseSuccess {
+  if (!isRecord(value) || !isRecord(value.status)) return false;
+  return value.status.code === "SUCCESS" && isRecord(value.status.data);
+}
+
+function isApiResponseError(value: unknown): value is ApiResponseError {
+  if (!isRecord(value) || !isRecord(value.status)) return false;
+  return typeof value.status.code === "string";
+}
+
 // --- Response Parse Function ---
 export async function parseApiResponse(response: Readonly<Response>): Promise<ApiResponse> {
   if (!response?.ok) {
     try {
-      const errorData = await response?.json();
-      if (errorData) {
-        return errorData as ApiResponseError;
+      const errorData: unknown = await response?.json();
+      if (isApiResponseError(errorData)) {
+        return errorData;
       }
     } catch {
       // ignore parse error; fall through to throwing an ApiError below
@@ -59,11 +77,18 @@ export async function parseApiResponse(response: Readonly<Response>): Promise<Ap
     );
   }
 
+  let data: unknown;
   try {
-    const data: any = await response?.json();
-    if (data?.status?.code === "SUCCESS" && data?.status?.data) return data as ApiResponseSuccess;
-    else return data as ApiResponseError;
+    data = await response?.json();
   } catch (jsonError) {
     throw new JsonParseError("API returned invalid JSON", jsonError);
   }
+
+  if (isApiResponseSuccess(data)) return data;
+  if (isApiResponseError(data)) return data;
+
+  // Parsed as JSON but carries no `status.code`. Returning it as an
+  // ApiResponseError would hand the caller a value that throws the moment they
+  // read `.status.message`, so fail here instead.
+  throw new ApiError("MALFORMED_RESPONSE", "API returned JSON in an unrecognised shape");
 }

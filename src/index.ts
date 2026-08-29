@@ -63,8 +63,8 @@ async function redeemVoucher({
       };
 
     // Handle unexpected errors
-    // should not happen, but for safety
-    console.error("Unexpected error in redeemVoucher:", error);
+    // should not happen, but for safety. The thrown error carries the message
+    // and cause, so a library has no reason to also write to the caller's console.
     throw new NetworkError(
       "NETWORK_ERROR",
       error instanceof Error ? error.message : "Unexpected error"

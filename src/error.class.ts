@@ -29,7 +29,7 @@ export class ApiError extends Error {
 
 export class JsonParseError extends Error {
   code: string;
-  constructor(message: Readonly<string>, originalError: any) {
+  constructor(message: Readonly<string>, originalError: unknown) {
     super(message);
     this.code = "INVALID_JSON_RESPONSE";
     this.name = "JsonParseError";

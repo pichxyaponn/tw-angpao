@@ -1,0 +1,45 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "unicorn", "oxc", "import", "react"],
+  "categories": {
+    "correctness": "error"
+  },
+  "rules": {
+    "no-console": ["warn", { "allow": ["warn", "error"] }],
+    "no-await-in-loop": "off",
+    "no-underscore-dangle": "off",
+    "no-unsafe-optional-chaining": "warn",
+    "prefer-const": "warn",
+    "eqeqeq": ["warn", "always"],
+    "no-var": "error",
+    "complexity": ["error", { "max": 20 }],
+    "max-depth": ["error", { "max": 4 }],
+    "max-nested-callbacks": "error",
+    "no-else-return": "warn",
+    "typescript/no-explicit-any": "error",
+    "typescript/no-unused-vars": [
+      "error",
+      { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }
+    ],
+    "typescript/consistent-type-imports": "warn",
+    "react/react-in-jsx-scope": "off",
+    "unicorn/no-useless-fallback-in-spread": "warn",
+    "unicorn/prefer-string-starts-ends-with": "warn",
+    "unicorn/no-new-array": "warn"
+  },
+  "overrides": [
+    {
+      "files": ["src/app/**", "src/components/**"],
+      "rules": { "complexity": ["warn", { "max": 20 }] }
+    }
+  ],
+  "ignorePatterns": [
+    ".next/**",
+    "out/**",
+    "build/**",
+    "node_modules/**",
+    "bfx-slot-reference/**",
+    "playwright-report/**",
+    "drizzle/**"
+  ]
+}
