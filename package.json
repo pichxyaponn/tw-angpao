@@ -51,11 +51,11 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@types/bun": "latest",
-    "@typescript-eslint/eslint-plugin": "^8.61.1",
-    "@typescript-eslint/parser": "^8.61.1",
-    "elysia": "^1.4.29",
-    "eslint": "^10.5.0",
-    "globals": "^17.6.0",
+    "@typescript-eslint/eslint-plugin": "^8.68.0",
+    "@typescript-eslint/parser": "^8.68.0",
+    "elysia": "^1.4.30",
+    "eslint": "^10.9.1",
+    "globals": "^17.11.0",
     "oxlint": "^1.80.0",
     "tsup": "^8.5.1"
   },
@@ -64,6 +64,6 @@
     "typescript": "^6.0.3"
   },
   "dependencies": {
-    "@sinclair/typebox": "^0.34.49"
+    "@sinclair/typebox": "^0.34.52"
   }
 }
